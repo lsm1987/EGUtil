@@ -10,7 +10,8 @@ public class EGSnsPlugin : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				"EGSnsPlugin/Public"
+				"EGSnsPlugin/Public",
+                "EGSnsPlugin/Classes",
 				// ... add public include paths required here ...
 			}
 			);

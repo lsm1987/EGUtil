@@ -16,7 +16,7 @@
 	"Modules": [
 		{
 			"Name": "EGSnsPlugin",
-			"Type": "Developer",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	]
