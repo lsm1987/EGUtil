@@ -1,6 +1,5 @@
 #include "EGSnsUtil.h"
 #include "EGSnsPluginRuntimeSettings.h"
-
 #include "EGSnsTwitter.h"
 
 TMap<EEGSnsServiceType, TSharedPtr<IEGSnsService>> FEGSnsUtil::Services;
@@ -17,6 +16,53 @@ void FEGSnsUtil::Finalize()
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsUtil::Finalize()"));
 
 	FinalizeService(EEGSnsServiceType::Twitter);
+}
+
+void FEGSnsUtil::Login(EEGSnsServiceType ServiceType)
+{
+	auto Service = FindService(ServiceType);
+	if (Service.IsValid())
+	{
+		Service->Login();
+	}
+}
+
+bool FEGSnsUtil::IsLoggedIn(EEGSnsServiceType ServiceType)
+{
+	auto Service = FindService(ServiceType);
+	if (Service.IsValid())
+	{
+		return Service->IsLoggedIn();
+	}
+
+	return false;
+}
+
+void FEGSnsUtil::Logout(EEGSnsServiceType ServiceType)
+{
+	auto Service = FindService(ServiceType);
+	if (Service.IsValid())
+	{
+		Service->Logout();
+	}
+}
+
+void FEGSnsUtil::ShareText(EEGSnsServiceType ServiceType, const FString& Text)
+{
+	auto Service = FindService(ServiceType);
+	if (Service.IsValid())
+	{
+		Service->ShareText(Text);
+	}
+}
+
+void FEGSnsUtil::ShareImageFile(EEGSnsServiceType ServiceType, const FString& Text, const FString& ImageFilePath)
+{
+	auto Service = FindService(ServiceType);
+	if (Service.IsValid())
+	{
+		Service->ShareImageFile(Text, ImageFilePath);
+	}
 }
 
 TSharedPtr<IEGSnsService> FEGSnsUtil::FindService(EEGSnsServiceType ServiceType)
