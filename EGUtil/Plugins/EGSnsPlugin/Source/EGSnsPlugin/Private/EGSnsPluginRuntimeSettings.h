@@ -9,7 +9,7 @@
  * Implements the settings for the EGSnsPlugin.
  */
 UCLASS(config=Game, defaultconfig, meta = (DisplayName = "EGSnsPlugin Settings"))
-class EGSNSPLUGIN_API UEGSnsPluginRuntimeSettings : public UDeveloperSettings
+class UEGSnsPluginRuntimeSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
