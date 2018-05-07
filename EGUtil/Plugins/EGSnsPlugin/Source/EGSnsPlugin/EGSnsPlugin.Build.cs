@@ -51,5 +51,14 @@ public class EGSnsPlugin : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
+
+		if (Target.Platform == UnrealTargetPlatform.Android)
+		{
+			PrivateIncludePaths.Add("EGSnsPlugin/Private/Android");
+		}
+		else
+		{
+			PrivateIncludePaths.Add("EGSnsPlugin/Private/GenericPlatform");
+		}
 	}
 }
