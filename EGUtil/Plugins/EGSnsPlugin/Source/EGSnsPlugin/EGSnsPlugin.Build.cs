@@ -1,6 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using System.IO;
 
 public class EGSnsPlugin : ModuleRules
 {
@@ -62,5 +63,11 @@ public class EGSnsPlugin : ModuleRules
 			PrivateIncludePaths.Add("EGSnsPlugin/Private/GenericPlatform");
 		}
 		*/
+
+		if (Target.Platform == UnrealTargetPlatform.Android)
+		{
+			string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
+			AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "EGSnsPlugin_UPL_Android.xml")));
+		}
 	}
 }

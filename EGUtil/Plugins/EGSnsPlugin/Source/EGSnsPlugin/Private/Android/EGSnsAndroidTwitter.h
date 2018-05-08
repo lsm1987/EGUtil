@@ -2,13 +2,15 @@
 
 #include "CoreMinimal.h"
 #include "EGSnsService.h"
+#include "Android/AndroidJava.h"
 
 /**
  * Android Twitter service
  */
-class FEGSnsAndroidTwitter : public IEGSnsService
+class FEGSnsAndroidTwitter : public FJavaClassObject, public IEGSnsService
 {
 public:
+	FEGSnsAndroidTwitter();
 	virtual ~FEGSnsAndroidTwitter() = default;
 
 	virtual void Initialize() override;
@@ -20,4 +22,9 @@ public:
 
 	virtual void ShareText(const FString& Text) override;
 	virtual void ShareImageFile(const FString& Text, const FString& ImageFilePath) override;
+
+private:
+	static FName GetClassName();
+
+	FJavaClassMethod InitializeMethod;
 };

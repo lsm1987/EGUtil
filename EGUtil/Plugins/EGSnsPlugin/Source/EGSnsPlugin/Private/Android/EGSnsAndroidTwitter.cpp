@@ -2,11 +2,23 @@
 #include "EGSnsPlugin.h"
 #include "EGSnsPluginRuntimeSettings.h"
 
+FEGSnsAndroidTwitter::FEGSnsAndroidTwitter()
+	: FJavaClassObject(GetClassName(), "()V")
+	, InitializeMethod(GetClassMethod("AndroidThunkJava_Initialize", "(Ljava/lang/String;Ljava/lang/String;)V"))
+{
+}
+
 void FEGSnsAndroidTwitter::Initialize()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::Initialize()"));
-	UE_LOG(EGSnsLog, Log, TEXT("CustomerKey: %s"), *GetDefault<UEGSnsPluginRuntimeSettings>()->GetTwitterConsumerKey());
-	UE_LOG(EGSnsLog, Log, TEXT("CustomerSecret: %s"), *GetDefault<UEGSnsPluginRuntimeSettings>()->GetTwitterConsumerSecret());
+
+	const FString ConsumerKey = GetDefault<UEGSnsPluginRuntimeSettings>()->GetTwitterConsumerKey();
+	const FString ConsumerSecret = GetDefault<UEGSnsPluginRuntimeSettings>()->GetTwitterConsumerSecret();
+
+	UE_LOG(EGSnsLog, Log, TEXT("CustomerKey: %s"), *ConsumerKey);
+	UE_LOG(EGSnsLog, Log, TEXT("CustomerSecret: %s"), *ConsumerSecret);
+
+	CallMethod<void>(InitializeMethod, GetJString(ConsumerKey), GetJString(ConsumerSecret));
 }
 
 void FEGSnsAndroidTwitter::Finalize()
@@ -41,4 +53,16 @@ void FEGSnsAndroidTwitter::ShareImageFile(const FString& Text, const FString& Im
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::ShareImageFile()"));
 	UE_LOG(EGSnsLog, Log, TEXT("Text: %s"), *Text);
 	UE_LOG(EGSnsLog, Log, TEXT("ImageFilePath: %s"), *ImageFilePath);
+}
+
+FName FEGSnsAndroidTwitter::GetClassName()
+{
+	if (FAndroidMisc::GetAndroidBuildVersion() >= 1)
+	{
+		return FName("com/lsm1987/egsnsplugin/EGSnsTwitter");
+	}
+	else
+	{
+		return FName("");
+	}
 }

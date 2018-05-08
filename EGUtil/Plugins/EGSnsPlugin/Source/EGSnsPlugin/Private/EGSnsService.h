@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "EGSnsService.h"
 
 /**
  * SnsService common interface
@@ -9,6 +8,8 @@
 class IEGSnsService
 {
 public:
+	virtual ~IEGSnsService() = 0;
+
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
 

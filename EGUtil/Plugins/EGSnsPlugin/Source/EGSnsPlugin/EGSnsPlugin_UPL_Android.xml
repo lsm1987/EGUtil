@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- EGSnsPlugin additions-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- init section is always evaluated once per architecture -->
+	<init>
+		<log text="EGSnsPlugin UPL init"/>
+	</init>
+
+	<!-- optional additions to proguard -->
+	<proguardAdditions>
+		<insert>
+-keep class com.lsm1987.egsnsplugin.** { *; }
+-dontwarn com.lsm1987.egsnsplugin.**
+		</insert>
+	</proguardAdditions>
+
+	<!-- optional files or directories to copy or delete from Intermediate/Android/APK before ndk-build
+	<prebuildCopies>
+	</prebuildCopies>
+	-->
+
+	<!-- optional files or directories to copy to Intermediate/Android/APK -->
+	<resourceCopies>
+		<copyDir src="$S(PluginDir)/../../Build/Android" dst="$S(BuildDir)" />
+	</resourceCopies>
+
+  <!-- optional additions to the GameActivity imports in GameActivity.java
+	<gameActivityImportAdditions>
+	</gameActivityImportAdditions>
+	-->
+
+  <!-- optional additions to the GameActivity class in GameActivity.java
+  <gameActivityClassAdditions>
+  </gameActivityClassAdditions>
+  -->
+
+  <!-- optional additions to GameActivity onCreate metadata reading in GameActivity.java
+	<gameActivityReadMetadataAdditions>
+	</gameActivityReadMetadataAdditions>
+	-->
+
+  <!-- optional additions to GameActivity onCreate in GameActivity.java
+	<gameActivityOnCreateAdditions>
+	</gameActivityOnCreateAdditions>
+	-->
+
+  <!-- optional additions to GameActivity onDestroy in GameActivity.java
+	<gameActivityOnDestroyAdditions>
+	</gameActivityOnDestroyAdditions>
+	-->
+
+  <!-- optional additions to GameActivity onStart in GameActivity.java
+	<gameActivityOnStartAdditions>
+	</gameActivityOnStartAdditions>
+  -->
+
+  <!-- optional additions to GameActivity onStop in GameActivity.java
+	<gameActivityOnStopAdditions>
+	</gameActivityOnStopAdditions>
+	-->
+
+  <!-- optional additions to GameActivity onPause in GameActivity.java
+	<gameActivityOnPauseAdditions>
+	</gameActivityOnPauseAdditions>
+	-->
+
+  <!-- optional additions to GameActivity onResume in GameActivity.java
+	<gameActivityOnResumeAdditions>
+	</gameActivityOnResumeAdditions>
+	-->
+
+  <!-- optional additions to GameActivity onActivityResult in GameActivity.java
+	<gameActivityOnActivityResultAdditions>
+	</gameActivityOnActivityResultAdditions>
+	-->
+
+  <!-- optional libraries to load in GameActivity.java before libUE4.so
+	<soLoadLibrary>
+	</soLoadLibrary>
+	-->
+</root>
