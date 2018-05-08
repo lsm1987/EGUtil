@@ -1,6 +1,13 @@
 #include "EGSnsUtil.h"
 #include "EGSnsPluginRuntimeSettings.h"
-#include "EGSnsTwitter.h"
+
+#if PLATFORM_ANDROID
+#include "Android/EGSnsAndroidTwitter.h"
+typedef FEGSnsAndroidTwitter FEGSnsTwitter;
+#else
+#include "GenericPlatform/EGSnsGenericTwitter.h"
+typedef FEGSnsGenericTwitter FEGSnsTwitter;
+#endif
 
 TMap<EEGSnsServiceType, TSharedPtr<IEGSnsService>> FEGSnsUtil::Services;
 

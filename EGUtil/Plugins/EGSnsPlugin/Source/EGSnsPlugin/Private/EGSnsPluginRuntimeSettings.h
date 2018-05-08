@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "UObject/ObjectMacros.h"
 #include "UObject/Object.h"
+#include "Engine/DeveloperSettings.h"
 #include "EGSnsPluginRuntimeSettings.generated.h"
 
 /**

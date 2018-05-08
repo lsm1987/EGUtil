@@ -52,6 +52,7 @@ public class EGSnsPlugin : ModuleRules
 			}
 			);
 
+		/*
 		if (Target.Platform == UnrealTargetPlatform.Android)
 		{
 			PrivateIncludePaths.Add("EGSnsPlugin/Private/Android");
@@ -60,5 +61,6 @@ public class EGSnsPlugin : ModuleRules
 		{
 			PrivateIncludePaths.Add("EGSnsPlugin/Private/GenericPlatform");
 		}
+		*/
 	}
 }

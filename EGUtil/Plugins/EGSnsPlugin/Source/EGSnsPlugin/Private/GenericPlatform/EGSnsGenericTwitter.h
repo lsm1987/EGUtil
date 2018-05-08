@@ -9,6 +9,8 @@
 class FEGSnsGenericTwitter : public IEGSnsService
 {
 public:
+	virtual ~FEGSnsGenericTwitter() = default;
+
 	virtual void Initialize() override;
 	virtual void Finalize() override;
 
@@ -19,5 +21,3 @@ public:
 	virtual void ShareText(const FString& Text) override;
 	virtual void ShareImageFile(const FString& Text, const FString& ImageFilePath) override;
 };
-
-typedef FEGSnsGenericTwitter FEGSnsTwitter;

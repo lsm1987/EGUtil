@@ -1,4 +1,5 @@
-#include "EGSnsTwitter.h"
+#include "EGSnsGenericTwitter.h"
+#include "EGSnsPlugin.h"
 #include "EGSnsPluginRuntimeSettings.h"
 
 void FEGSnsGenericTwitter::Initialize()
