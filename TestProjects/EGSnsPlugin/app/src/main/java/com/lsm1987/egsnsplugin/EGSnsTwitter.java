@@ -1,10 +1,7 @@
 package com.lsm1987.egsnsplugin;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-
-import com.epicgames.ue4.GameActivity;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.DefaultLogger;
@@ -18,7 +15,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.internal.CommonUtils;
 
-public class EGSnsTwitter
+public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
 {
     volatile TwitterAuthClient authClient;
     Callback<TwitterSession> loginCallback;
@@ -29,7 +26,7 @@ public class EGSnsTwitter
         Log.d("EGSnsPlugin", "customerKey: " + customerKey);
         Log.d("EGSnsPlugin", "customerSecret: " + customerSecret);
 
-        TwitterConfig config = new TwitterConfig.Builder(getActivity())
+        TwitterConfig config = new TwitterConfig.Builder(EGSnsGameActivityUtil.getActivity())
                 .logger(new DefaultLogger(Log.DEBUG))
                 .twitterAuthConfig(new TwitterAuthConfig(customerKey, customerSecret))
                 .debug(true)
@@ -49,6 +46,13 @@ public class EGSnsTwitter
                 Log.d("EGSnsPlugin", "EGSnsTwitter loginCallback failure. ex:" + exception.getMessage());
             }
         };
+
+        EGSnsGameActivityUtil.addActivityResultHandler(this);
+    }
+
+    public void AndroidThunkJava_Finalize()
+    {
+        EGSnsGameActivityUtil.removeActivityResultHandler(this);
     }
 
     public void AndroidThunkJava_Login()
@@ -61,7 +65,7 @@ public class EGSnsTwitter
                     "Login callback must not be null, did you call Initialize?");
         }
 
-        getTwitterAuthClient().authorize(getActivity(), loginCallback);
+        getTwitterAuthClient().authorize(EGSnsGameActivityUtil.getActivity(), loginCallback);
     }
 
     public boolean AndroidThunkJava_IsLoggedin()
@@ -88,11 +92,6 @@ public class EGSnsTwitter
         Log.d("EGSnsPlugin", "imageFilePath: " + imageFilePath);
     }
 
-    private Activity getActivity()
-    {
-        return GameActivity.Get();
-    }
-
     private TwitterAuthClient getTwitterAuthClient() {
         if (authClient == null) {
             synchronized (EGSnsTwitter.class) {
@@ -104,6 +103,7 @@ public class EGSnsTwitter
         return authClient;
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == getTwitterAuthClient().getRequestCode()) {
             getTwitterAuthClient().onActivityResult(requestCode, resultCode, data);

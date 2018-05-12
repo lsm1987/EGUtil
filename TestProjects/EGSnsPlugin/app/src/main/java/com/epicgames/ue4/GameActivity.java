@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.lsm1987.egsnsplugin.EGSnsGameActivityUtil;
 import com.lsm1987.egsnsplugin.EGSnsTwitter;
 import com.lsm1987.egsnsplugin.R;
 
@@ -35,8 +36,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Pass the activity result to the login button.
-        twitter.onActivityResult(requestCode, resultCode, data);
+        EGSnsGameActivityUtil.onActivityResult(requestCode, resultCode, data);
     }
 
     public void onClickBtnLogin(View v) {
