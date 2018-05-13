@@ -12,9 +12,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // for Java 8
+        /*
         jackOptions {
             enabled true
         }
+        */
     }
     buildTypes {
         release {
@@ -24,10 +26,12 @@ android {
     }
 
     // for Java 8
+    /*
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    */
 }
 
 dependencies {
@@ -38,5 +42,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile 'com.twitter.sdk.android:twitter-core:3.3.0'    // 3.2 부터 Java 8 필요
+    //compile 'com.twitter.sdk.android:twitter-core:3.3.0'    // 3.2 부터 Java 8 필요
+    compile 'com.twitter.sdk.android:twitter-core:3.1.1'
 }
