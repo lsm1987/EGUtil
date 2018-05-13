@@ -5,6 +5,7 @@
 FEGSnsAndroidTwitter::FEGSnsAndroidTwitter()
 	: FJavaClassObject(GetClassName(), "()V")
 	, InitializeMethod(GetClassMethod("AndroidThunkJava_Initialize", "(Ljava/lang/String;Ljava/lang/String;)V"))
+	, LoginMethod(GetClassMethod("AndroidThunkJava_Login", "()V"))
 {
 }
 
@@ -29,6 +30,8 @@ void FEGSnsAndroidTwitter::Finalize()
 void FEGSnsAndroidTwitter::Login()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::Login()"));
+
+	CallMethod<void>(LoginMethod);
 }
 
 bool FEGSnsAndroidTwitter::IsLoggedIn()

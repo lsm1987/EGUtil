@@ -1,19 +1,71 @@
 package com.lsm1987.egsnsplugin;
 
+import android.content.Intent;
 import android.util.Log;
 
-public class EGSnsTwitter
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.internal.CommonUtils;
+
+public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
 {
+    volatile TwitterAuthClient authClient;
+    Callback<TwitterSession> loginCallback;
+
     public void AndroidThunkJava_Initialize(String customerKey, String customerSecret)
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Initialize()");
         Log.d("EGSnsPlugin", "customerKey: " + customerKey);
         Log.d("EGSnsPlugin", "customerSecret: " + customerSecret);
+
+        TwitterConfig config = new TwitterConfig.Builder(EGSnsGameActivityUtil.getActivity())
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(customerKey, customerSecret))
+                .debug(true)
+                .build();
+        Twitter.initialize(config);
+
+        loginCallback = new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a TwitterSession for making API calls
+                Log.d("EGSnsPlugin", "EGSnsTwitter loginCallback success");
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+                Log.d("EGSnsPlugin", "EGSnsTwitter loginCallback failure. ex:" + exception.getMessage());
+            }
+        };
+
+        EGSnsGameActivityUtil.addActivityResultHandler(this);
+    }
+
+    public void AndroidThunkJava_Finalize()
+    {
+        EGSnsGameActivityUtil.removeActivityResultHandler(this);
     }
 
     public void AndroidThunkJava_Login()
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Login()");
+
+        if (loginCallback == null)
+        {
+            CommonUtils.logOrThrowIllegalStateException(TwitterCore.TAG,
+                    "Login callback must not be null, did you call Initialize?");
+        }
+
+        getTwitterAuthClient().authorize(EGSnsGameActivityUtil.getActivity(), loginCallback);
     }
 
     public boolean AndroidThunkJava_IsLoggedin()
@@ -38,5 +90,23 @@ public class EGSnsTwitter
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_ShareImageFile()");
         Log.d("EGSnsPlugin", "text: " + text);
         Log.d("EGSnsPlugin", "imageFilePath: " + imageFilePath);
+    }
+
+    private TwitterAuthClient getTwitterAuthClient() {
+        if (authClient == null) {
+            synchronized (EGSnsTwitter.class) {
+                if (authClient == null) {
+                    authClient = new TwitterAuthClient();
+                }
+            }
+        }
+        return authClient;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == getTwitterAuthClient().getRequestCode()) {
+            getTwitterAuthClient().onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

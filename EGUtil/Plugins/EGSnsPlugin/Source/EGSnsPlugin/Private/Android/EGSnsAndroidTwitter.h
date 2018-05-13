@@ -27,4 +27,5 @@ private:
 	static FName GetClassName();
 
 	FJavaClassMethod InitializeMethod;
+	FJavaClassMethod LoginMethod;
 };
