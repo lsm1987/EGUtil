@@ -5,6 +5,17 @@
 	<init>
 		<log text="EGSnsPlugin UPL init"/>
 	</init>
+	
+	<!-- optional updates applied to AndroidManifest.xml -->
+	<androidManifestUpdates>
+		<setElement result="TwitterOAuthActivityElement" value="activity"/>
+		<addAttribute tag="$TwitterOAuthActivityElement" name="android:name" value="com.twitter.sdk.android.core.identity.OAuthActivity"/>
+		<addAttribute tag="$TwitterOAuthActivityElement" name="android:configChanges" value="orientation|screenSize"/>
+		<addAttribute tag="$TwitterOAuthActivityElement" name="android:excludeFromRecents" value="true"/>
+		<addAttribute tag="$TwitterOAuthActivityElement" name="android:exported" value="false"/>
+		<addAttribute tag="$TwitterOAuthActivityElement" name="android:theme" value="@android:style/Theme.NoTitleBar"/>
+		<addElement tag="application" name="TwitterOAuthActivityElement"/>
+	</androidManifestUpdates>
 
 	<AARImports>
 		<insertValue value="repositories $S(PluginDir)/../../ThirdParty/AndroidRepository"/>
