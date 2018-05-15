@@ -27,5 +27,10 @@ private:
 	static FName GetClassName();
 
 	FJavaClassMethod InitializeMethod;
+	FJavaClassMethod FinalizeMethod;
 	FJavaClassMethod LoginMethod;
+	FJavaClassMethod LogoutMethod;
+	FJavaClassMethod IsLoggedInMethod;
+	FJavaClassMethod ShareTextMethod;
+	FJavaClassMethod ShareImageFileMethod;
 };

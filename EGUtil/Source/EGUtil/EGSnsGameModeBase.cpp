@@ -34,6 +34,18 @@ namespace
 		})
 	);
 
+	FAutoConsoleCommand SnsLogout(
+		TEXT("EG.SNS.Logout"),
+		TEXT("(int)ServiceType"),
+		FConsoleCommandWithArgsDelegate::CreateLambda([](const TArray<FString>& Args) {
+			const EEGSnsServiceType ServiceType = (Args.IsValidIndex(0))
+				? (EEGSnsServiceType)FCString::Atoi(*Args[0])
+				: (EEGSnsServiceType)0;
+
+			FEGSnsUtil::Logout(ServiceType);
+		})
+	);
+
 	FAutoConsoleCommand SnsIsLoggedIn(
 		TEXT("EG.SNS.Loggedin"),
 		TEXT("(int)ServiceType"),
@@ -44,18 +56,6 @@ namespace
 
 			const bool isLoggedIn = FEGSnsUtil::IsLoggedIn(ServiceType);
 			UE_LOG(EGLog, Log, TEXT("IsLoggedIn: %d"), (int32)isLoggedIn);
-		})
-	);
-
-	FAutoConsoleCommand SnsLogout(
-		TEXT("EG.SNS.Logout"),
-		TEXT("(int)ServiceType"),
-		FConsoleCommandWithArgsDelegate::CreateLambda([](const TArray<FString>& Args) {
-			const EEGSnsServiceType ServiceType = (Args.IsValidIndex(0))
-				? (EEGSnsServiceType)FCString::Atoi(*Args[0])
-				: (EEGSnsServiceType)0;
-
-			FEGSnsUtil::Logout(ServiceType);
 		})
 	);
 

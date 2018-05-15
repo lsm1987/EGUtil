@@ -52,6 +52,8 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
 
     public void AndroidThunkJava_Finalize()
     {
+        Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Finalize()");
+        
         EGSnsGameActivityUtil.removeActivityResultHandler(this);
     }
 
@@ -73,9 +75,9 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Logout()");
     }
     
-    public boolean AndroidThunkJava_IsLoggedin()
+    public boolean AndroidThunkJava_IsLoggedIn()
     {
-        Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_IsLoggedin()");
+        Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_IsLoggedIn()");
         return false;
     }
 

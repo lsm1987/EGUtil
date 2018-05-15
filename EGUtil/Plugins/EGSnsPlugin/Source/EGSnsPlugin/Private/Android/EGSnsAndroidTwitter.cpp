@@ -5,7 +5,12 @@
 FEGSnsAndroidTwitter::FEGSnsAndroidTwitter()
 	: FJavaClassObject(GetClassName(), "()V")
 	, InitializeMethod(GetClassMethod("AndroidThunkJava_Initialize", "(Ljava/lang/String;Ljava/lang/String;)V"))
+	, FinalizeMethod(GetClassMethod("AndroidThunkJava_Finalize", "()V"))
 	, LoginMethod(GetClassMethod("AndroidThunkJava_Login", "()V"))
+	, LogoutMethod(GetClassMethod("AndroidThunkJava_Logout", "()V"))
+	, IsLoggedInMethod(GetClassMethod("AndroidThunkJava_IsLoggedIn", "()Z"))
+	, ShareTextMethod(GetClassMethod("AndroidThunkJava_ShareText", "(Ljava/lang/String;)V"))
+	, ShareImageFileMethod(GetClassMethod("AndroidThunkJava_ShareImageFile", "(Ljava/lang/String;Ljava/lang/String;)V"))
 {
 }
 
@@ -25,6 +30,8 @@ void FEGSnsAndroidTwitter::Initialize()
 void FEGSnsAndroidTwitter::Finalize()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::Finalize()"));
+
+	CallMethod<void>(FinalizeMethod);
 }
 
 void FEGSnsAndroidTwitter::Login()
@@ -37,18 +44,23 @@ void FEGSnsAndroidTwitter::Login()
 void FEGSnsAndroidTwitter::Logout()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::Logout()"));
+
+	CallMethod<void>(LogoutMethod);
 }
 
 bool FEGSnsAndroidTwitter::IsLoggedIn()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::IsLoggedIn()"));
-	return false;
+	
+	return CallMethod<bool>(IsLoggedInMethod);
 }
 
 void FEGSnsAndroidTwitter::ShareText(const FString& Text)
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::ShareText()"));
 	UE_LOG(EGSnsLog, Log, TEXT("Text: %s"), *Text);
+
+	CallMethod<void>(ShareTextMethod, GetJString(Text));
 }
 
 void FEGSnsAndroidTwitter::ShareImageFile(const FString& Text, const FString& ImageFilePath)
@@ -56,6 +68,8 @@ void FEGSnsAndroidTwitter::ShareImageFile(const FString& Text, const FString& Im
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::ShareImageFile()"));
 	UE_LOG(EGSnsLog, Log, TEXT("Text: %s"), *Text);
 	UE_LOG(EGSnsLog, Log, TEXT("ImageFilePath: %s"), *ImageFilePath);
+	
+	CallMethod<void>(ShareImageFileMethod, GetJString(Text), GetJString(ImageFilePath));
 }
 
 FName FEGSnsAndroidTwitter::GetClassName()
