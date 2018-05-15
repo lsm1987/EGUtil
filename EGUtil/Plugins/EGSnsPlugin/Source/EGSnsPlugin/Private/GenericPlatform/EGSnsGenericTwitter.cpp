@@ -19,15 +19,15 @@ void FEGSnsGenericTwitter::Login()
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsGenericTwitter::Login()"));
 }
 
+void FEGSnsGenericTwitter::Logout()
+{
+	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsGenericTwitter::Logout()"));
+}
+
 bool FEGSnsGenericTwitter::IsLoggedIn()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsGenericTwitter::IsLoggedIn()"));
 	return false;
-}
-
-void FEGSnsGenericTwitter::Logout()
-{
-	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsGenericTwitter::Logout()"));
 }
 
 void FEGSnsGenericTwitter::ShareText(const FString& Text)

@@ -34,15 +34,15 @@ void FEGSnsAndroidTwitter::Login()
 	CallMethod<void>(LoginMethod);
 }
 
+void FEGSnsAndroidTwitter::Logout()
+{
+	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::Logout()"));
+}
+
 bool FEGSnsAndroidTwitter::IsLoggedIn()
 {
 	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::IsLoggedIn()"));
 	return false;
-}
-
-void FEGSnsAndroidTwitter::Logout()
-{
-	UE_LOG(EGSnsLog, Log, TEXT("FEGSnsAndroidTwitter::Logout()"));
 }
 
 void FEGSnsAndroidTwitter::ShareText(const FString& Text)

@@ -67,16 +67,16 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
 
         getTwitterAuthClient().authorize(EGSnsGameActivityUtil.getActivity(), loginCallback);
     }
+    
+    public void AndroidThunkJava_Logout()
+    {
+        Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Logout()");
+    }
 
     public boolean AndroidThunkJava_IsLoggedin()
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_IsLoggedin()");
         return false;
-    }
-
-    public void AndroidThunkJava_Logout()
-    {
-        Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Logout()");
     }
 
     public void AndroidThunkJava_ShareText(String text)
