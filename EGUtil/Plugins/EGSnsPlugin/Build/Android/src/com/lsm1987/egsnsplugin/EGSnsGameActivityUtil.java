@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
-import com.epicgames.ue4.GameActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,18 +18,24 @@ public class EGSnsGameActivityUtil
         void onActivityResult(int requestCode, int resultCode, Intent data);
     }
 
+    private static Activity gameActivity;
     private static List<ActivityResultHandler> activityResultHandlers = new ArrayList<ActivityResultHandler>();
+
+    public static void setActivity(Activity activity)
+    {
+        gameActivity = activity;
+    }
 
     public static Activity getActivity()
     {
-        return GameActivity.Get();
+        return gameActivity;
     }
 
     public static void addActivityResultHandler(ActivityResultHandler handler)
     {
         if (activityResultHandlers.contains(handler))
         {
-            Log.d("EGSnsGameActivityUtil", "Already added ActivityResultHandler");
+            Log.d("EGSnsPlugin", "Already added ActivityResultHandler");
             return;
         }
 
@@ -44,7 +48,7 @@ public class EGSnsGameActivityUtil
 
         if (!isRemoved)
         {
-            Log.d("EGSnsGameActivityUtil", "Remove ActivityResultHandler failed. Not exist in handlers");
+            Log.d("EGSnsPlugin", "Remove ActivityResultHandler failed. Not exist in handlers");
         }
     }
 

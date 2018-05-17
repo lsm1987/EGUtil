@@ -62,10 +62,14 @@ import com.lsm1987.egsnsplugin.EGSnsGameActivityUtil;
 	</gameActivityReadMetadataAdditions>
 	-->
 
-  <!-- optional additions to GameActivity onCreate in GameActivity.java
+	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
 	<gameActivityOnCreateAdditions>
+		<insert>
+		// EGSnsPlugin start
+		EGSnsGameActivityUtil.setActivity(this);
+		// EGSnsPlugin end
+		</insert>
 	</gameActivityOnCreateAdditions>
-	-->
 
   <!-- optional additions to GameActivity onDestroy in GameActivity.java
 	<gameActivityOnDestroyAdditions>
