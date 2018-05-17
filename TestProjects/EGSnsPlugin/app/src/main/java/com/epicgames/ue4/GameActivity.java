@@ -17,22 +17,14 @@ import java.util.Properties;
 
 public class GameActivity extends AppCompatActivity {
 
-    static GameActivity _activity;
-
     private EGSnsTwitter twitter = new EGSnsTwitter();
-
-    /** Access singleton activity for game. **/
-    public static GameActivity Get()
-    {
-        return _activity;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        _activity = this;
+        EGSnsGameActivityUtil.setActivity(this);
 
         Properties pluginProperties = LoadPluginProperties();
 
