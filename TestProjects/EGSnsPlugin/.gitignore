@@ -7,3 +7,6 @@
 /build
 /captures
 .externalNativeBuild
+
+# local setting
+/app/src/main/assets/egsnsplugin.properties
