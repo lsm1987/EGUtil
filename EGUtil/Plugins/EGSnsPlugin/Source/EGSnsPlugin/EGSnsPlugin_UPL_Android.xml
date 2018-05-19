@@ -9,7 +9,7 @@
 	<!-- optional updates applied to AndroidManifest.xml -->
 	<androidManifestUpdates>
 		<setElement result="TwitterOAuthActivityElement" value="activity"/>
-		<addAttribute tag="$TwitterOAuthActivityElement" name="android:name" value="com.twitter.sdk.android.core.identity.OAuthActivity"/>
+		<addAttribute tag="$TwitterOAuthActivityElement" name="android:name" value="egsnsplugin.com.twitter.sdk.android.core.identity.OAuthActivity"/>
 		<addAttribute tag="$TwitterOAuthActivityElement" name="android:configChanges" value="orientation|screenSize"/>
 		<addAttribute tag="$TwitterOAuthActivityElement" name="android:excludeFromRecents" value="true"/>
 		<addAttribute tag="$TwitterOAuthActivityElement" name="android:exported" value="false"/>
@@ -21,15 +21,42 @@
 		<insertValue value="repositories $S(PluginDir)/../../ThirdParty/AndroidRepository"/>
 		<insertNewline/>
 		<insert>
-com.twitter.sdk.android,twitter-core,3.1.1
+egsnsplugin.com.twitter.sdk.android,egsnsplugin-twitter-core,3.1.1
 		</insert>
 	</AARImports>
 
 	<!-- optional additions to proguard -->
 	<proguardAdditions>
 		<insert>
+#EGSnsPlugin
 -keep class com.lsm1987.egsnsplugin.** { *; }
 -dontwarn com.lsm1987.egsnsplugin.**
+
+##Twitter-core start
+#GSON
+# Retain Annotations for model objects
+-keepattributes *Annotation*
+
+#Okio
+-dontwarn java.nio.file.**
+-dontwarn org.codehaus.mojo.animal_sniffer.**
+
+#Retrofit 2
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote egsnsplugin.retrofit2.Platform
+# Platform used when running on RoboVM on iOS. Will not be used at runtime.
+-dontnote egsnsplugin.retrofit2.Platform$IOS$MainThreadExecutor
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn egsnsplugin.retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+# Retain class members for annotations
+-keepclasseswithmembers class * {
+  @egsnsplugin.retrofit2.http.* &lt;methods&gt;;
+}
+##Twitter-core end
 		</insert>
 	</proguardAdditions>
 

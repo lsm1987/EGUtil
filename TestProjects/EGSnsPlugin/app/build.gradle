@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -43,5 +43,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     //compile 'com.twitter.sdk.android:twitter-core:3.3.0'    // 3.2 부터 Java 8 필요
-    compile 'com.twitter.sdk.android:twitter-core:3.1.1'
+    compile files('libs/egsnsplugin-converter-gson-2.1.0.jar')
+    compile files('libs/egsnsplugin-gson-2.7.jar')
+    compile files('libs/egsnsplugin-okhttp-3.4.2.jar')
+    compile files('libs/egsnsplugin-okio-1.9.0.jar')
+    compile files('libs/egsnsplugin-retrofit-2.1.0.jar')
+    compile project(':egsnsplugin-twitter-core-3.1.1')
 }

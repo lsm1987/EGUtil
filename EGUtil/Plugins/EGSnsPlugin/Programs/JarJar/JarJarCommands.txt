@@ -1,0 +1,8 @@
+java -jar jarjar-1.4.jar process JarJarRules.txt original/gson-2.7.jar repackaged/egsnsplugin-gson-2.7.jar
+java -jar jarjar-1.4.jar process JarJarRules.txt original/okhttp-3.4.2.jar repackaged/egsnsplugin-okhttp-3.4.2.jar
+java -jar jarjar-1.4.jar process JarJarRules.txt original/okio-1.9.0.jar repackaged/egsnsplugin-okio-1.9.0.jar
+java -jar jarjar-1.4.jar process JarJarRules.txt original/converter-gson-2.1.0.jar repackaged/egsnsplugin-converter-gson-2.1.0.jar
+java -jar jarjar-1.4.jar process JarJarRules.txt original/retrofit-2.1.0.jar repackaged/egsnsplugin-retrofit-2.1.0.jar
+
+// aar 내부의 jar
+java -jar jarjar-1.4.jar process JarJarRules.txt original/classes.jar repackaged/classes.jar

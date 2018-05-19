@@ -3,17 +3,17 @@ package com.lsm1987.egsnsplugin;
 import android.content.Intent;
 import android.util.Log;
 
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.DefaultLogger;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterConfig;
-import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
-import com.twitter.sdk.android.core.internal.CommonUtils;
+import egsnsplugin.com.twitter.sdk.android.core.Callback;
+import egsnsplugin.com.twitter.sdk.android.core.DefaultLogger;
+import egsnsplugin.com.twitter.sdk.android.core.Result;
+import egsnsplugin.com.twitter.sdk.android.core.Twitter;
+import egsnsplugin.com.twitter.sdk.android.core.TwitterAuthConfig;
+import egsnsplugin.com.twitter.sdk.android.core.TwitterConfig;
+import egsnsplugin.com.twitter.sdk.android.core.TwitterCore;
+import egsnsplugin.com.twitter.sdk.android.core.TwitterException;
+import egsnsplugin.com.twitter.sdk.android.core.TwitterSession;
+import egsnsplugin.com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import egsnsplugin.com.twitter.sdk.android.core.internal.CommonUtils;
 
 public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
 {

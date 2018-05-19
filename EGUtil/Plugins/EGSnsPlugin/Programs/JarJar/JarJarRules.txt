@@ -1,0 +1,3 @@
+rule com.google.** egsnsplugin.com.google.@1
+rule com.squareup.** egsnsplugin.com.squareup.@1
+rule com.twitter.** egsnsplugin.com.twitter.@1

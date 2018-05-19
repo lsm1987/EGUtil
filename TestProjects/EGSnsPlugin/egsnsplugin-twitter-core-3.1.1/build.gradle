@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('egsnsplugin-twitter-core-3.1.1.aar'))
