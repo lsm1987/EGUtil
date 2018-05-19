@@ -8,5 +8,9 @@
 /captures
 .externalNativeBuild
 
+# build intermediate files
+/app/src/main/libs
+/app/src/main/obj
+
 # local setting
 /app/src/main/assets/egsnsplugin.properties

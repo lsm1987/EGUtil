@@ -24,6 +24,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        System.loadLibrary("egsnsplugin");
         EGSnsGameActivityUtil.setActivity(this);
 
         Properties pluginProperties = LoadPluginProperties();
