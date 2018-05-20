@@ -22,6 +22,10 @@ public:
 	static void ShareText(EEGSnsServiceType ServiceType, const FString& Text);
 	static void ShareImageFile(EEGSnsServiceType ServiceType, const FString& Text, const FString& ImageFilePath);
 
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnLoggedIn, EEGSnsServiceType /*ServiceType*/, bool /*bSuccess*/);
+
+	static FOnLoggedIn OnLoggedIn;
+
 private:
 	static TMap<EEGSnsServiceType, TSharedPtr<IEGSnsService>> Services;
 

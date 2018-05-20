@@ -1,6 +1,7 @@
 #include "EGSnsAndroidTwitter.h"
 #include "EGSnsPlugin.h"
 #include "EGSnsPluginRuntimeSettings.h"
+#include "EGSnsUtil.h"
 
 FEGSnsAndroidTwitter::FEGSnsAndroidTwitter()
 	: FJavaClassObject(GetClassName(), "()V")
@@ -88,4 +89,6 @@ JNI_METHOD void Java_com_lsm1987_egsnsplugin_EGSnsTwitter_nativeOnLoggedIn(JNIEn
 {
 	UE_LOG(EGSnsLog, Log, TEXT("EGSnsTwitter_nativeOnLoggedIn()"));
 	UE_LOG(EGSnsLog, Log, TEXT("bSuccess: %d"), (bSuccess == JNI_TRUE) ? 1 : 0);
+
+	FEGSnsUtil::OnLoggedIn.Broadcast(EEGSnsServiceType::Twitter, bSuccess);
 }

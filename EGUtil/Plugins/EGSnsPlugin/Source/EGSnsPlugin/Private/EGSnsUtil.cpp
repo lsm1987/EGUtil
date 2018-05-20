@@ -9,6 +9,8 @@ typedef FEGSnsAndroidTwitter FEGSnsTwitter;
 typedef FEGSnsGenericTwitter FEGSnsTwitter;
 #endif
 
+FEGSnsUtil::FOnLoggedIn FEGSnsUtil::OnLoggedIn;
+
 TMap<EEGSnsServiceType, TSharedPtr<IEGSnsService>> FEGSnsUtil::Services;
 
 void FEGSnsUtil::Initialize()

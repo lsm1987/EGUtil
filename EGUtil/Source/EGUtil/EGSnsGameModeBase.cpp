@@ -4,21 +4,55 @@
 #include "EGUtil.h"
 #include "EGSnsUtil.h"
 
+void AEGSnsGameModeBase::InitializeSns()
+{
+	FEGSnsUtil::Initialize();
+
+	OnLoggedInHandle = FEGSnsUtil::OnLoggedIn.AddUObject(this, &AEGSnsGameModeBase::OnLoggedIn);
+}
+
+void AEGSnsGameModeBase::FinalizeSns()
+{
+	FEGSnsUtil::OnLoggedIn.Remove(OnLoggedInHandle);
+	OnLoggedInHandle.Reset();
+
+	FEGSnsUtil::Finalize();
+}
+
+void AEGSnsGameModeBase::OnLoggedIn(EEGSnsServiceType ServiceType, bool bSuccess)
+{
+	UE_LOG(EGLog, Log, TEXT("AEGSnsGameModeBase::OnLoggedIn()"));
+	UE_LOG(EGLog, Log, TEXT("ServiceType: %d"), (int32)ServiceType);
+	UE_LOG(EGLog, Log, TEXT("bSuccess: %d"), (int32)bSuccess);
+}
+
 namespace
 {
-	FAutoConsoleCommand SnsInitialize(
+	FAutoConsoleCommandWithWorld SnsInitialize(
 		TEXT("EG.SNS.Init"),
 		TEXT("SNS Initialize"),
-		FConsoleCommandDelegate::CreateLambda([] {
-			FEGSnsUtil::Initialize();
+		FConsoleCommandWithWorldDelegate::CreateLambda([](UWorld* World) {
+			auto GameMode = World->GetAuthGameMode<AEGSnsGameModeBase>();
+			if (!GameMode)
+			{
+				UE_LOG(EGLog, Log, TEXT("not SnsGameMode"));
+				return;
+			}
+
+			GameMode->InitializeSns();
 		})
 	);
 
-	FAutoConsoleCommand SnsFinalize(
+	FAutoConsoleCommandWithWorld SnsFinalize(
 		TEXT("EG.SNS.Fin"),
 		TEXT("SNS Finalize"),
-		FConsoleCommandDelegate::CreateLambda([] {
-			FEGSnsUtil::Finalize();
+		FConsoleCommandWithWorldDelegate::CreateLambda([](UWorld* World) {
+			auto GameMode = World->GetAuthGameMode<AEGSnsGameModeBase>();
+			if (!GameMode)
+			{
+				UE_LOG(EGLog, Log, TEXT("not SnsGameMode"));
+			}
+			GameMode->FinalizeSns();
 		})
 	);
 
