@@ -38,12 +38,14 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
             public void success(Result<TwitterSession> result) {
                 // Do something with result, which provides a TwitterSession for making API calls
                 Log.d("EGSnsPlugin", "EGSnsTwitter loginCallback success");
+                nativeOnLoggedIn(true);
             }
 
             @Override
             public void failure(TwitterException exception) {
                 // Do something on failure
                 Log.d("EGSnsPlugin", "EGSnsTwitter loginCallback failure. ex:" + exception.getMessage());
+                nativeOnLoggedIn(false);
             }
         };
 
@@ -111,4 +113,6 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
             getTwitterAuthClient().onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    private native void nativeOnLoggedIn(boolean bSuccess);
 }

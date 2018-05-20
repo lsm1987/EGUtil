@@ -83,3 +83,9 @@ FName FEGSnsAndroidTwitter::GetClassName()
 		return FName("");
 	}
 }
+
+JNI_METHOD void Java_com_lsm1987_egsnsplugin_EGSnsTwitter_nativeOnLoggedIn(JNIEnv* jenv, jobject thiz, jboolean bSuccess)
+{
+	UE_LOG(EGSnsLog, Log, TEXT("EGSnsTwitter_nativeOnLoggedIn()"));
+	UE_LOG(EGSnsLog, Log, TEXT("bSuccess: %d"), (bSuccess == JNI_TRUE) ? 1 : 0);
+}
