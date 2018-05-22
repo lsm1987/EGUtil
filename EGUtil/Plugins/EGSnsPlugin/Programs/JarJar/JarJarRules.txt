@@ -1,3 +1,5 @@
 rule com.google.** egsnsplugin.com.google.@1
-rule com.squareup.** egsnsplugin.com.squareup.@1
+rule retrofit2.** egsnsplugin.retrofit2.@1
+rule okhttp3.** egsnsplugin.okhttp3.@1
+rule okio.** egsnsplugin.okio.@1
 rule com.twitter.** egsnsplugin.com.twitter.@1

@@ -36,27 +36,31 @@
             android:text="Login" />
 
         <Button
-            android:id="@+id/btnIsLoggedIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="is_logged_in" />
-
-        <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onClickBtnILogout"
             android:text="Logout" />
+
+        <Button
+            android:id="@+id/btnIsLoggedIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBtnIsLoggedIn"
+            android:text="is_logged_in" />
 
         <Button
             android:id="@+id/btnShareText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onClickBtnShareText"
             android:text="SHARE_TEXT" />
 
         <Button
             android:id="@+id/btnShareScreenshot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SHARE_SCREENSHOT" />
+            android:onClick="onClickBtnShareScreenshotFile"
+            android:text="SHARE_SCREENSHOT_FILE" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -18,7 +18,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
+import java.util.TimeZone;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -74,9 +78,42 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickBtnLogin(View v) {
+    public void onClickBtnLogin(View v)
+    {
         Log.d("GameActivity", "onClickBtnLogin");
         twitter.AndroidThunkJava_Login();
+    }
+
+    public void onClickBtnILogout(View v)
+    {
+        Log.d("GameActivity", "onClickBtnLogin");
+        twitter.AndroidThunkJava_Logout();
+    }
+
+    public void onClickBtnIsLoggedIn(View v)
+    {
+        Log.d("GameActivity", "onClickBtnIsLoggedIn");
+
+        boolean isLoggedIn = twitter.AndroidThunkJava_IsLoggedIn();
+        Log.d("GameActivity", "isLoggedIn: " + isLoggedIn);
+    }
+
+    public void onClickBtnShareText(View v)
+    {
+        Log.d("GameActivity", "onClickBtnShareText");
+
+        String text = "Share text test. " + getCurrentTimeText();
+
+        twitter.AndroidThunkJava_ShareText(text);
+    }
+
+    public void onClickBtnShareScreenshotFile(View v)
+    {
+        Log.d("GameActivity", "onClickBtnShareScreenshotFile");
+
+        String text = "Share screenshot file test. "  + getCurrentTimeText();
+
+        twitter.AndroidThunkJava_ShareImageFile(text, getScreenshotSaveFilePath());
     }
 
     private Properties LoadPluginProperties()
@@ -105,5 +142,13 @@ public class GameActivity extends AppCompatActivity {
     private String getScreenshotSaveFilePath()
     {
         return getScreenshotSaveDirPath() + File.separator + "Screenshot.png";
+    }
+
+    private String getCurrentTimeText()
+    {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }
