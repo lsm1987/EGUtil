@@ -3,6 +3,10 @@
 #include "EGSnsGameModeBase.h"
 #include "EGUtil.h"
 #include "EGSnsUtil.h"
+#include "Engine/GameViewportClient.h"
+#include "Misc/Paths.h"
+#include "Misc/FileHelper.h"
+#include "ImageUtils.h"
 
 void AEGSnsGameModeBase::InitializeSns()
 {
@@ -36,6 +40,68 @@ void AEGSnsGameModeBase::OnShared(EEGSnsServiceType ServiceType, bool bSuccess, 
 	UE_LOG(EGLog, Log, TEXT("ServiceType: %d"), (int32)ServiceType);
 	UE_LOG(EGLog, Log, TEXT("bSuccess: %d"), (int32)bSuccess);
 	UE_LOG(EGLog, Log, TEXT("ErrorMessage: %s"), *ErrorMessage);
+}
+
+void AEGSnsGameModeBase::RequestScreenshot()
+{
+	if (OnScreenshotCapturedHandle.IsValid())
+	{
+		UE_LOG(EGLog, Log, TEXT("Already screenshot capturing"));
+		return;
+	}
+
+	ClearCapturedScreenshot();
+	OnScreenshotCapturedHandle = UGameViewportClient::OnScreenshotCaptured().AddUObject(this, &AEGSnsGameModeBase::OnScreenshotCaptured);
+
+	FScreenshotRequest::RequestScreenshot(true);
+}
+
+void AEGSnsGameModeBase::OnScreenshotCaptured(int32 Width, int32 Height, const TArray<FColor>& Colors)
+{
+	UE_LOG(EGLog, Log, TEXT("OnScreenshotCaptured. Width: %d, Height: %d"), Width, Height);
+
+	OnScreenshotCapturedHandle.Reset();
+
+	ScreenshotWidth = Width;
+	ScreenshotHeight = Height;
+	ScreenshotColors = Colors;
+
+	SaveScreenshotToFile();
+}
+
+void AEGSnsGameModeBase::SaveScreenshotToFile()
+{
+	if (!IsScreenshotCaptured())
+	{
+		UE_LOG(EGLog, Log, TEXT("Screenshot not captured"));
+		return;
+	}
+
+	TArray<uint8> CompressedBitmap;
+	FImageUtils::CompressImageArray(ScreenshotWidth, ScreenshotHeight, ScreenshotColors, CompressedBitmap);
+	FFileHelper::SaveArrayToFile(CompressedBitmap, *GetScreenshotFilePath());
+
+	UE_LOG(EGLog, Log, TEXT("Screenshot file saved. path: %s"), *GetScreenshotFilePath());
+}
+
+void AEGSnsGameModeBase::ClearCapturedScreenshot()
+{
+	ScreenshotWidth = 0;
+	ScreenshotHeight = 0;
+	ScreenshotColors.Reset();
+}
+
+bool AEGSnsGameModeBase::IsScreenshotCaptured() const
+{
+	return (ScreenshotWidth != 0
+		&& ScreenshotHeight != 0
+		&& ScreenshotColors.Num() != 0);
+}
+
+FString AEGSnsGameModeBase::GetScreenshotFilePath()
+{
+	// °°Àº °æ·Î¿¡ µ¤¾î¾¸
+	return FPaths::Combine(FPaths::GamePersistentDownloadDir(), TEXT("Sns"), TEXT("Screenshot.png"));
 }
 
 namespace
@@ -122,7 +188,7 @@ namespace
 		})
 	);
 
-	FAutoConsoleCommand ShareImageFile(
+	FAutoConsoleCommand SnsShareImageFile(
 		TEXT("EG.SNS.Image"),
 		TEXT("(int)ServiceType, (str)Text, (str)ImageFilePath"),
 		FConsoleCommandWithArgsDelegate::CreateLambda([](const TArray<FString>& Args) {
@@ -137,9 +203,24 @@ namespace
 
 			const FString ImageFilePath = (Args.IsValidIndex(2))
 				? Args[2]
-				: TEXT("");
+				: AEGSnsGameModeBase::GetScreenshotFilePath();
 
 			FEGSnsUtil::ShareImageFile(ServiceType, Text, ImageFilePath);
+		})
+	);
+
+	FAutoConsoleCommandWithWorld SnsScreenshot(
+		TEXT("EG.SNS.Screen"),
+		TEXT("Save screenshot file for SNS"),
+		FConsoleCommandWithWorldDelegate::CreateLambda([](UWorld* World) {
+			auto GameMode = World->GetAuthGameMode<AEGSnsGameModeBase>();
+			if (!GameMode)
+			{
+				UE_LOG(EGLog, Log, TEXT("not SnsGameMode"));
+				return;
+			}
+
+			GameMode->RequestScreenshot();
 		})
 	);
 }
