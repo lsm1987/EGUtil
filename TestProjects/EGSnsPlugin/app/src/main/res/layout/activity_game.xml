@@ -13,6 +13,21 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
+        <TextClock
+            android:id="@+id/textClock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timeZone="Asia/Seoul"
+            android:format24Hour="yyyy-MM-dd HH:mm:ss"
+            android:format12Hour="yyyy-MM-dd hh:mm:ss a" />
+
+        <Button
+            android:id="@+id/btnSaveScreenshot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBtnSaveScreenshot"
+            android:text="Save_screenshot" />
+
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
@@ -37,5 +52,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SHARE_TEXT" />
+
+        <Button
+            android:id="@+id/btnShareScreenshot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SHARE_SCREENSHOT" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
