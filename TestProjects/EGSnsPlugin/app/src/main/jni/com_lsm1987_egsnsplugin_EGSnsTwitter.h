@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT void JNICALL Java_com_lsm1987_egsnsplugin_EGSnsTwitter_nativeOnLoggedIn
   (JNIEnv *, jobject, jboolean);
 
+/*
+ * Class:     com_lsm1987_egsnsplugin_EGSnsTwitter
+ * Method:    nativeOnShared
+ * Signature: (ZLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_lsm1987_egsnsplugin_EGSnsTwitter_nativeOnShared
+  (JNIEnv *, jobject, jboolean, jstring);
+
 #ifdef __cplusplus
 }
 #endif

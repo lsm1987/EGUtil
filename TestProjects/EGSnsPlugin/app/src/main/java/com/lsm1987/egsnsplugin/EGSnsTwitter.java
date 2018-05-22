@@ -213,12 +213,16 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
     private void onShareSuccess()
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::onShareSuccess()");
+
+        nativeOnShared(true, null);
     }
 
-    private void onShareFail(String ErroeMessage)
+    private void onShareFail(String ErrorMessage)
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::onShareFailed()");
-        Log.d("EGSnsPlugin", "ErroeMessage: " + ErroeMessage);
+        Log.d("EGSnsPlugin", "ErroeMessage: " + ErrorMessage);
+
+        nativeOnShared(false, ErrorMessage);
     }
 
     @Override
@@ -229,4 +233,5 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
     }
 
     private native void nativeOnLoggedIn(boolean bSuccess);
+    private native void nativeOnShared(boolean bSuccess, String ErrorMessage);
 }
