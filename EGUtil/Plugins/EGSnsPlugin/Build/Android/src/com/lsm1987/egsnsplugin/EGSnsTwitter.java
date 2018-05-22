@@ -3,10 +3,13 @@ package com.lsm1987.egsnsplugin;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.File;
+
 import egsnsplugin.com.twitter.sdk.android.core.Callback;
 import egsnsplugin.com.twitter.sdk.android.core.DefaultLogger;
 import egsnsplugin.com.twitter.sdk.android.core.Result;
 import egsnsplugin.com.twitter.sdk.android.core.Twitter;
+import egsnsplugin.com.twitter.sdk.android.core.TwitterApiClient;
 import egsnsplugin.com.twitter.sdk.android.core.TwitterAuthConfig;
 import egsnsplugin.com.twitter.sdk.android.core.TwitterConfig;
 import egsnsplugin.com.twitter.sdk.android.core.TwitterCore;
@@ -14,9 +17,29 @@ import egsnsplugin.com.twitter.sdk.android.core.TwitterException;
 import egsnsplugin.com.twitter.sdk.android.core.TwitterSession;
 import egsnsplugin.com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import egsnsplugin.com.twitter.sdk.android.core.internal.CommonUtils;
+import egsnsplugin.com.twitter.sdk.android.core.models.Media;
+import egsnsplugin.com.twitter.sdk.android.core.models.Tweet;
+import egsnsplugin.okhttp3.MediaType;
+import egsnsplugin.okhttp3.RequestBody;
 
 public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
 {
+    public enum ErrorCode {
+        NO_ACTIVE_SESSION("TWITTER_NO_ACTIVE_SESSION"),
+        MEDIA_FILE_NOT_EXIST("TWITTER_MEDIA_FILE_NOT_EXIST");
+
+        private final String message;
+
+        ErrorCode(final String message) {
+            this.message = message;
+        }
+
+        @Override
+        public String toString() {
+            return message;
+        }
+    }
+
     volatile TwitterAuthClient authClient;
     Callback<TwitterSession> loginCallback;
 
@@ -75,18 +98,33 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
     public void AndroidThunkJava_Logout()
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_Logout()");
+
+        TwitterCore.getInstance().getSessionManager().clearActiveSession();
     }
     
     public boolean AndroidThunkJava_IsLoggedIn()
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_IsLoggedIn()");
-        return false;
+
+        final TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        return (activeSession != null
+            && activeSession.getAuthToken() != null
+            && !activeSession.getAuthToken().isExpired());
     }
 
     public void AndroidThunkJava_ShareText(String text)
     {
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_ShareText()");
         Log.d("EGSnsPlugin", "text: " + text);
+
+        TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (activeSession == null)
+        {
+            onShareFail(ErrorCode.NO_ACTIVE_SESSION.toString());
+            return;
+        }
+
+        uploadTweet(activeSession, text, null);
     }
 
     public void AndroidThunkJava_ShareImageFile(String text, String imageFilePath)
@@ -94,6 +132,15 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
         Log.d("EGSnsPlugin", "EGSnsTwitter::AndroidThunkJava_ShareImageFile()");
         Log.d("EGSnsPlugin", "text: " + text);
         Log.d("EGSnsPlugin", "imageFilePath: " + imageFilePath);
+
+        TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (activeSession == null)
+        {
+            onShareFail(ErrorCode.NO_ACTIVE_SESSION.toString());
+            return;
+        }
+
+        uploadTweet(activeSession, text, imageFilePath);
     }
 
     private TwitterAuthClient getTwitterAuthClient() {
@@ -107,6 +154,77 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
         return authClient;
     }
 
+    private void uploadTweet(final TwitterSession session, final String text, final String mediaFilePath)
+    {
+        if (mediaFilePath != null) {
+            uploadMedia(session, mediaFilePath, new Callback<Media>() {
+                @Override
+                public void success(Result<Media> result) {
+                    uploadTweetWithMedia(session, text, result.data.mediaIdString);
+                }
+
+                @Override
+                public void failure(TwitterException exception)
+                {
+                    onShareFail(exception.toString());
+                }
+
+            });
+        } else {
+            uploadTweetWithMedia(session, text, null);
+        }
+    }
+
+    private void uploadMedia(TwitterSession session, String mediaFilePath, Callback<Media> callback)
+    {
+        final File file = new File(mediaFilePath);
+        if (!file.isFile())
+        {
+            onShareFail(ErrorCode.MEDIA_FILE_NOT_EXIST.toString());
+            return;
+        }
+
+        final TwitterApiClient client = TwitterCore.getInstance().getApiClient(session);
+        final String mimeType = EGSnsFileUtils.getMimeType(file);
+        final RequestBody media = RequestBody.create(MediaType.parse(mimeType), file);
+
+        client.getMediaService().upload(media, null, null).enqueue(callback);
+    }
+
+    private void uploadTweetWithMedia(TwitterSession session, String text, String mediaId)
+    {
+        final TwitterApiClient client = TwitterCore.getInstance().getApiClient(session);
+
+        client.getStatusesService().update(text, null, null, null, null, null, null, true, mediaId)
+                .enqueue(
+                        new Callback<Tweet>() {
+                            @Override
+                            public void success(Result<Tweet> result) {
+                                onShareSuccess();
+                            }
+
+                            @Override
+                            public void failure(TwitterException exception) {
+                                onShareFail(exception.toString());
+                            }
+                        });
+    }
+
+    private void onShareSuccess()
+    {
+        Log.d("EGSnsPlugin", "EGSnsTwitter::onShareSuccess()");
+
+        nativeOnShared(true, null);
+    }
+
+    private void onShareFail(String ErrorMessage)
+    {
+        Log.d("EGSnsPlugin", "EGSnsTwitter::onShareFailed()");
+        Log.d("EGSnsPlugin", "ErroeMessage: " + ErrorMessage);
+
+        nativeOnShared(false, ErrorMessage);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == getTwitterAuthClient().getRequestCode()) {
@@ -115,4 +233,5 @@ public class EGSnsTwitter implements EGSnsGameActivityUtil.ActivityResultHandler
     }
 
     private native void nativeOnLoggedIn(boolean bSuccess);
+    private native void nativeOnShared(boolean bSuccess, String ErrorMessage);
 }

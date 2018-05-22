@@ -1,4 +1,5 @@
 #include "EGSnsUtil.h"
+#include "EGSnsPlugin.h"
 #include "EGSnsPluginRuntimeSettings.h"
 
 #if PLATFORM_ANDROID
@@ -9,9 +10,10 @@ typedef FEGSnsAndroidTwitter FEGSnsTwitter;
 typedef FEGSnsGenericTwitter FEGSnsTwitter;
 #endif
 
-FEGSnsUtil::FOnLoggedIn FEGSnsUtil::OnLoggedIn;
-
 TMap<EEGSnsServiceType, TSharedPtr<IEGSnsService>> FEGSnsUtil::Services;
+
+FEGSnsUtil::FOnLoggedIn FEGSnsUtil::OnLoggedInDelegate;
+FEGSnsUtil::FOnShared FEGSnsUtil::OnSharedDelegate;
 
 void FEGSnsUtil::Initialize()
 {
@@ -72,6 +74,16 @@ void FEGSnsUtil::ShareImageFile(EEGSnsServiceType ServiceType, const FString& Te
 	{
 		Service->ShareImageFile(Text, ImageFilePath);
 	}
+}
+
+FEGSnsUtil::FOnLoggedIn& FEGSnsUtil::OnLoggedIn()
+{
+	return OnLoggedInDelegate;
+}
+
+FEGSnsUtil::FOnShared& FEGSnsUtil::OnShared()
+{
+	return OnSharedDelegate;
 }
 
 TSharedPtr<IEGSnsService> FEGSnsUtil::FindService(EEGSnsServiceType ServiceType)

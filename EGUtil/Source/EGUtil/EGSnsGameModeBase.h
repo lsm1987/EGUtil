@@ -22,6 +22,8 @@ public:
 
 private:
 	FDelegateHandle OnLoggedInHandle;
+	FDelegateHandle OnSharedHandle;
 
 	void OnLoggedIn(EEGSnsServiceType ServiceType, bool bSuccess);
+	void OnShared(EEGSnsServiceType ServiceType, bool bSuccess, const FString& ErrorMessage);
 };

@@ -8,12 +8,16 @@ void AEGSnsGameModeBase::InitializeSns()
 {
 	FEGSnsUtil::Initialize();
 
-	OnLoggedInHandle = FEGSnsUtil::OnLoggedIn.AddUObject(this, &AEGSnsGameModeBase::OnLoggedIn);
+	OnLoggedInHandle = FEGSnsUtil::OnLoggedIn().AddUObject(this, &AEGSnsGameModeBase::OnLoggedIn);
+	OnSharedHandle = FEGSnsUtil::OnShared().AddUObject(this, &AEGSnsGameModeBase::OnShared);
 }
 
 void AEGSnsGameModeBase::FinalizeSns()
 {
-	FEGSnsUtil::OnLoggedIn.Remove(OnLoggedInHandle);
+	FEGSnsUtil::OnShared().Remove(OnSharedHandle);
+	OnSharedHandle.Reset();
+
+	FEGSnsUtil::OnLoggedIn().Remove(OnLoggedInHandle);
 	OnLoggedInHandle.Reset();
 
 	FEGSnsUtil::Finalize();
@@ -24,6 +28,14 @@ void AEGSnsGameModeBase::OnLoggedIn(EEGSnsServiceType ServiceType, bool bSuccess
 	UE_LOG(EGLog, Log, TEXT("AEGSnsGameModeBase::OnLoggedIn()"));
 	UE_LOG(EGLog, Log, TEXT("ServiceType: %d"), (int32)ServiceType);
 	UE_LOG(EGLog, Log, TEXT("bSuccess: %d"), (int32)bSuccess);
+}
+
+void AEGSnsGameModeBase::OnShared(EEGSnsServiceType ServiceType, bool bSuccess, const FString& ErrorMessage)
+{
+	UE_LOG(EGLog, Log, TEXT("AEGSnsGameModeBase::OnShared()"));
+	UE_LOG(EGLog, Log, TEXT("ServiceType: %d"), (int32)ServiceType);
+	UE_LOG(EGLog, Log, TEXT("bSuccess: %d"), (int32)bSuccess);
+	UE_LOG(EGLog, Log, TEXT("ErrorMessage: %s"), *ErrorMessage);
 }
 
 namespace
@@ -103,7 +115,8 @@ namespace
 
 			const FString Text = (Args.IsValidIndex(1))
 				? Args[1]
-				: TEXT("Test share text. #Test https://www.google.com");
+				: FString::Printf(TEXT("Test share text. %s #Test https://www.google.com")
+					, *FDateTime::Now().ToString(TEXT("%Y/%m/%d %H:%M:%S")));
 
 			FEGSnsUtil::ShareText(ServiceType, Text);
 		})
@@ -119,7 +132,8 @@ namespace
 
 			const FString Text = (Args.IsValidIndex(1))
 				? Args[1]
-				: TEXT("Test share image file. #Test https://www.google.com");
+				: FString::Printf(TEXT("Test share image file. %s #Test https://www.google.com")
+					, *FDateTime::Now().ToString(TEXT("%Y/%m/%d %H:%M:%S")));
 
 			const FString ImageFilePath = (Args.IsValidIndex(2))
 				? Args[2]

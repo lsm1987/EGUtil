@@ -90,5 +90,23 @@ JNI_METHOD void Java_com_lsm1987_egsnsplugin_EGSnsTwitter_nativeOnLoggedIn(JNIEn
 	UE_LOG(EGSnsLog, Log, TEXT("EGSnsTwitter_nativeOnLoggedIn()"));
 	UE_LOG(EGSnsLog, Log, TEXT("bSuccess: %d"), (bSuccess == JNI_TRUE) ? 1 : 0);
 
-	FEGSnsUtil::OnLoggedIn.Broadcast(EEGSnsServiceType::Twitter, bSuccess);
+	FEGSnsUtil::OnLoggedIn().Broadcast(EEGSnsServiceType::Twitter, bSuccess);
+}
+
+JNI_METHOD void Java_com_lsm1987_egsnsplugin_EGSnsTwitter_nativeOnShared(JNIEnv* jenv, jobject thiz, jboolean bSuccess, jstring ErrorMessage)
+{
+	UE_LOG(EGSnsLog, Log, TEXT("EGSnsTwitter_nativeOnShared()"));
+	UE_LOG(EGSnsLog, Log, TEXT("bSuccess: %d"), (bSuccess == JNI_TRUE) ? 1 : 0);
+
+	FString ErrorMessageString;
+	if (ErrorMessage != nullptr)
+	{
+		const char* JavaErrorMessageChars = jenv->GetStringUTFChars(ErrorMessage, nullptr);
+		ErrorMessageString = UTF8_TO_TCHAR(JavaErrorMessageChars);
+		jenv->ReleaseStringUTFChars(ErrorMessage, JavaErrorMessageChars);
+	}
+
+	UE_LOG(EGSnsLog, Log, TEXT("ErrorMessage: %s"), *ErrorMessageString);
+
+	FEGSnsUtil::OnShared().Broadcast(EEGSnsServiceType::Twitter, bSuccess, ErrorMessageString);
 }
