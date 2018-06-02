@@ -101,7 +101,7 @@ bool AEGSnsGameModeBase::IsScreenshotCaptured() const
 FString AEGSnsGameModeBase::GetScreenshotFilePath()
 {
 	// °°Àº °æ·Î¿¡ µ¤¾î¾¸
-	return FPaths::Combine(FPaths::GamePersistentDownloadDir(), TEXT("Sns"), TEXT("Screenshot.png"));
+	return FPaths::Combine(FPaths::ProjectPersistentDownloadDir(), TEXT("Sns"), TEXT("Screenshot.png"));
 }
 
 namespace
