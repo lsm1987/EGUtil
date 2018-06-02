@@ -4,6 +4,7 @@
 #include "EGUtil.h"
 #include "EGSnsUtil.h"
 #include "Engine/GameViewportClient.h"
+#include "Engine/World.h"
 #include "Misc/Paths.h"
 #include "Misc/FileHelper.h"
 #include "ImageUtils.h"
