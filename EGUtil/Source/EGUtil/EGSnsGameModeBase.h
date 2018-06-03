@@ -28,20 +28,6 @@ private:
 	void OnLoggedIn(EEGSnsServiceType ServiceType, bool bSuccess);
 	void OnShared(EEGSnsServiceType ServiceType, bool bSuccess, const FString& ErrorMessage);
 
-	// Screenshot //////////////
-private:
-	FDelegateHandle OnScreenshotCapturedHandle;
-	int32 ScreenshotWidth;
-	int32 ScreenshotHeight;
-	TArray<FColor> ScreenshotColors;
-
-public:
-	void RequestScreenshot();
-private:
-	void OnScreenshotCaptured(int32 Width, int32 Height, const TArray<FColor>& Colors);
-	void SaveScreenshotToFile();
-	void ClearCapturedScreenshot();
-	bool IsScreenshotCaptured() const;
 public:
 	static FString GetScreenshotFilePath();
 };
